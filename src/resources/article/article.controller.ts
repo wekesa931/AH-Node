@@ -26,6 +26,6 @@ export default class ArticleController {
   createArticle = (req: express.Request, res: express.Response) => {
     const article: Articles = req.body;
     this.articles.push(article);
-    res.send("Article created successfully");
+    res.send("Article created");
   }
 }
