@@ -17,8 +17,12 @@
   "license": "ISC",
   "dependencies": {
     "@types/morgan": "^1.7.37",
+    "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.18.4",
     "typescript": "^3.6.2"
   },
   "devDependencies": {
