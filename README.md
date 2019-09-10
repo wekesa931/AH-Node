@@ -1,2 +1,4 @@
 # AH-Node
-Authors-Haven with node
+Authors-Haven with node, typescript, postgres
+
+to run linting: `eslint '**/*.ts' --fix`
