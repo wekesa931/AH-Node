@@ -19,5 +19,5 @@ module.exports = {
 
     // Use a different schema for the SequelizeMeta table
     migrationStorageTableSchema: 'custom_schema',
-  }
+  },
 }
