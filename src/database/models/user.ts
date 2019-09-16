@@ -3,9 +3,9 @@ import { SequelizeAttributes } from '../../types/sequelize'
 
 export interface UserAttributes {
   id?: string
-  firstname: number
+  firstname: string
   lastname: string
-  email: number
+  email: string
   username: string
   password: string
   activated?: boolean

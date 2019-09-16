@@ -6,7 +6,12 @@
   "scripts": {
     "start-server": "tsc && node build/server.js",
     "start": "nodemon -e ts -w ./ -x npm run start-server",
-    "lint": "tsc --noEmit && eslint 'src/*/**/*.{js,ts,tsx}' --quiet --fix"
+    "test": "cross-env NODE_ENV=test npm run reset:db && NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/polyfill -r ts-node/register src/*/**/**/*spec.ts src/*/**/*.spec.ts src/**/*.spec.ts --timeout 20000 --exit",
+    "reset:db": "npm run dropMeta && npm run sequelize db:migrate:undo:all && npm run sequelize db:migrate && npm run reset:seeds",
+    "lint": "tsc --noEmit && eslint 'src/*/**/*.{js,ts,tsx}' --quiet --fix",
+    "dropMeta": "ts-node src/database/other.ts ",
+    "sequelize": "./node_modules/.bin/babel-node ./node_modules/.bin/sequelize $*",
+    "reset:seeds": "npm run sequelize db:seed:undo:all && npm run sequelize db:seed:all"
   },
   "lint-staged": {
     "*.{js,ts}": [
