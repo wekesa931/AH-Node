@@ -4,27 +4,33 @@ module.exports = {
     return queryInterface.createTable('Profiles', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
-      firstName: {
-        type: Sequelize.STRING
+      firstname: {
+        allowNull: false,
+        type: Sequelize.STRING,
       },
-      lastName: {
-        type: Sequelize.STRING
+      lastname: {
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       email: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       username: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       bio: {
-        type: Sequelize.STRING
+        allowNull: true,
+        type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
