@@ -19,3 +19,7 @@ for successful migrations:
 ```
 sequelize db:migrate:undo:all &&  sequelize db:migrate && sequelize db:seed:all && node grantsSeeders.js
 ```
+`sudo -u postgres psql`
+
+Creating a model: `npx sequelize-cli model:generate --name Profile --attributes firstName:string`
+npx sequelize-cli model:generate --name Profile --attributes firstName:string,lastName:string,email:string,username:string,bio:string,image:string
