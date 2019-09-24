@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt'
 import db from '../../../../database/models'
 import jsonResponse from '../../../../utils/jsonResponse'
 import userAuth from '../../validations/userAuth'
+import UserProfile from '../profile-controller/Profile'
 
 const jwt = require('jsonwebtoken')
 
@@ -32,6 +33,7 @@ class CreateUser {
     try {
       const { username } = jwt.verify(req.params.token, JWT_SECRET)
       await db.User.update({ activated: true }, { where: { username } })
+      UserProfile.createProfile(username)
       return jsonResponse({
         res,
         status: 201,
