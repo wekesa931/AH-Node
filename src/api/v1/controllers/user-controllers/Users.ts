@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable require-jsdoc */
+
 import { RequestHandler } from 'express'
 import uuid from 'uuid/v4'
 import bcrypt from 'bcrypt'
-import db from '../../../database/models'
-import jsonResponse from '../../../utils/jsonResponse'
-import userAuth from '../validations/userAuth'
+import db from '../../../../database/models'
+import jsonResponse from '../../../../utils/jsonResponse'
+import userAuth from '../../validations/userAuth'
 
 const jwt = require('jsonwebtoken')
 
@@ -14,10 +13,7 @@ const JWT_SECRET = process.env['JWT_SECRET']
 class CreateUser {
   public signUp: RequestHandler = async (req, res, next) => {
     const { firstname, lastname, email, username, password } = req.body
-    console.log('---------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----------------------')
-    console.log(password)
     await bcrypt.hash(password, 10, function(err, hash) {
-      console.log('---------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----------------------')
       const newUser = {
         id: uuid(),
         firstname,

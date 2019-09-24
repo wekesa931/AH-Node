@@ -7,23 +7,23 @@ import * as EmailValidator from 'email-validator'
 const jwt = require('jsonwebtoken')
 let passwordValidator: any = require('password-validator')
 
-import commonValidators from './common';
-import jsonResponse from "../../../utils/jsonResponse";
+import commonValidators from './common'
+import jsonResponse from '../../../utils/jsonResponse'
 import { RequestHandler } from 'express-serve-static-core';
-import { APIError } from './messages';
-import db from '../../../database/models';
+import { APIError } from './messages'
 const JWT_SECRET = process.env['JWT_SECRET']
 
 class userAuth {
   public checkExistingUser: RequestHandler = (req, res, next): any => {
-    const {
-      email,
-      username,} = req.body
-      const User = db.User
-    commonValidators.verifyDuplication([{email},{username}], 'User', res, next)
+    const { email, username } = req.body
+    commonValidators.verifyDuplication([{ email }, { username }], 'User', res, next)
   }
   public fieldValidation: RequestHandler = (req, res, next): any => {
     const requiredFields = ['firstname', 'lastname', 'email', 'username', 'password']
+    commonValidators.verifyFields(requiredFields, req.body, res, next)
+  }
+  public loginFieldValidation: RequestHandler = (req, res, next): any => {
+    const requiredFields = ['email', 'password']
     commonValidators.verifyFields(requiredFields, req.body, res, next)
   }
   private transporter = nodemailer.createTransport({
@@ -64,10 +64,7 @@ class userAuth {
     })
   }
   public emailValidation: RequestHandler = (req, res, next): any => {
-    EmailValidator.validate(req.body.email) ? next() : next(APIError.errorResponseMessage(
-      400,
-      'Invalid Email',
-      res))
+    EmailValidator.validate(req.body.email) ? next() : next(APIError.errorResponseMessage(400, 'Invalid Email', res))
   }
   public passwordValidation: RequestHandler = (req, res, next): any => {
     const schema = new passwordValidator()
@@ -88,12 +85,16 @@ class userAuth {
       .is()
       .not()
       .oneOf(['Passw0rd', 'Password123']) // Blacklist these values
-    schema.validate(req.body.password) ? next() : next(APIError.errorResponseMessage(
-        400,
-        'A password must have at least a capital and small letter, a number and a minimum of 8 characters. It should not be obvious e.g Password',
-        res))
+    schema.validate(req.body.password)
+      ? next()
+      : next(
+          APIError.errorResponseMessage(
+            400,
+            'A password must have at least a capital and small letter, a number and a minimum of 8 characters. It should not be obvious e.g Password',
+            res,
+          ),
+        )
   }
-
 }
 
 export default new userAuth()
