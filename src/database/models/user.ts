@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as Sequelize from 'sequelize'
 import { SequelizeAttributes } from '../../types/sequelize'
 
@@ -60,6 +61,14 @@ export const UserInit = (sequalize: Sequelize.Sequelize): Sequelize.Model<UserIn
   const User = sequalize.define<UserInstance, UserAttributes>('User', attributes, {
     tableName: 'Users',
   })
+
+  User.associate = ({ Profile }) => {
+    User.hasMany(Profile, {
+      foreignKey: 'userId',
+      as: 'orderItems',
+      onDelete: 'CASCADE',
+    })
+  }
 
   return User
 }

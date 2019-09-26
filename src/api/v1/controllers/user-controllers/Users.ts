@@ -1,4 +1,6 @@
-
+/* eslint-disable require-jsdoc */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { RequestHandler } from 'express'
 import uuid from 'uuid/v4'
 import bcrypt from 'bcrypt'
@@ -29,11 +31,11 @@ class CreateUser {
       }
     })
   }
-  public activateUser: RequestHandler = async (req, res) => {
+  public activateUser: RequestHandler = async (req, res, next) => {
     try {
       const { username } = jwt.verify(req.params.token, JWT_SECRET)
       await db.User.update({ activated: true }, { where: { username } })
-      UserProfile.createProfile(username)
+      UserProfile.createProfile(username, res, next)
       return jsonResponse({
         res,
         status: 201,

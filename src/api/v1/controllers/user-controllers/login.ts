@@ -24,17 +24,13 @@ class LoginUser {
       : next(APIError.errorResponseMessage(400, 'wrong username or email', res))
   }
 
-  public confirmPassword = (
-    user: any, password: string, inputPass: string,  res: any, next: any) => {
+  public confirmPassword = (user: any, password: string, inputPass: string, res: any, next: any) => {
     bcrypt.compare(inputPass, password, (err, response) => {
       if (err){
         next(APIError.errorResponseMessage(500, 'Oops! Something went wrong!', res))
       } else {
-        response ?
-        this.makeAuth(user, res)
-        : next(APIError.errorResponseMessage(400, 'wrong username or email', res))
-        
-        }
+        response ? this.makeAuth(user, res) : next(APIError.errorResponseMessage(400, 'wrong username or email', res))
+      }
     })
   }
 

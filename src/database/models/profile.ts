@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as Sequelize from 'sequelize'
 import { SequelizeAttributes } from '../../types/sequelize'
 
 export interface ProfileAttributes {
   id?: string
+  userId?: string
   firstname: string
   lastname: string
   email: string
@@ -22,6 +24,10 @@ export const ProfileInit = (sequalize: Sequelize.Sequelize): Sequelize.Model<Pro
       primaryKey: true,
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
+    },
+    userId: {
+      allowNull: false,
+      type: Sequelize.STRING,
     },
     firstname: {
       allowNull: false,
@@ -45,7 +51,7 @@ export const ProfileInit = (sequalize: Sequelize.Sequelize): Sequelize.Model<Pro
     },
     image: {
       allowNull: true,
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     createdAt: {
       allowNull: false,
@@ -59,5 +65,13 @@ export const ProfileInit = (sequalize: Sequelize.Sequelize): Sequelize.Model<Pro
   const Profile = sequalize.define<ProfileInstance, ProfileAttributes>('Profile', attributes, {
     tableName: 'Profiles',
   })
+
+  Profile.associate = ({ User }) => {
+    Profile.belongsTo(User, {
+      foreignKey: 'userId',
+      as: 'user',
+      onDelete: 'CASCADE',
+    })
+  }
   return Profile
 }
