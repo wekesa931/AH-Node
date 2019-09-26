@@ -13,6 +13,14 @@ import { RequestHandler } from 'express-serve-static-core';
 import { APIError } from './messages'
 const JWT_SECRET = process.env['JWT_SECRET']
 
+interface DecodedInterface {
+  username: string,
+  email: string,
+  id: string,
+  iat: string | number,
+  exp: string | number
+}
+
 class userAuth {
   public checkExistingUser: RequestHandler = (req, res, next): any => {
     const { email, username } = req.body
@@ -94,6 +102,23 @@ class userAuth {
             res,
           ),
         )
+  }
+  public checkUserAuthenticated: RequestHandler = (req, res, next) => {
+    const { authorization = '' } = req.headers
+    const token = authorization.slice(7)
+
+    if (!token) {
+      next(APIError.errorResponseMessage(401, 'Unauthorized Access', res))
+    }
+    try {
+      const decoded: DecodedInterface = jwt.verify(token, JWT_SECRET)
+      const { username, email, id } = decoded
+      const currentUser = { currentUser: { username, email, id } }
+      Object.assign(req, currentUser)
+      next()
+    } catch (err) {
+      next(APIError.errorResponseMessage(401, 'Unauthorized Access', res))
+    }
   }
 }
 
