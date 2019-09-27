@@ -62,10 +62,13 @@ export const UserInit = (sequalize: Sequelize.Sequelize): Sequelize.Model<UserIn
     tableName: 'Users',
   })
 
-  User.associate = ({ Profile }) => {
+  User.associate = ({ Profile, Article }) => {
     User.hasMany(Profile, {
       foreignKey: 'userId',
-      as: 'orderItems',
+      onDelete: 'CASCADE',
+    })
+    User.hasMany(Article, {
+      foreignKey: 'userId',
       onDelete: 'CASCADE',
     })
   }

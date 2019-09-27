@@ -26,8 +26,13 @@ export const ProfileInit = (sequalize: Sequelize.Sequelize): Sequelize.Model<Pro
       defaultValue: Sequelize.UUIDV4,
     },
     userId: {
-      allowNull: false,
-      type: Sequelize.STRING,
+      type: Sequelize.UUID,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'NO ACTION',
     },
     firstname: {
       allowNull: false,

@@ -2,8 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { RequestHandler } from 'express'
+const slugify = require('slug-generator')
 import db from '../database/models'
-import jsonResponse from './jsonResponse';
+import jsonResponse from './jsonResponse'
 import { APIError } from '../api/v1/validations/messages'
 
 export default class CrudController {
