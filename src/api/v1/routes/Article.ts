@@ -7,4 +7,13 @@ const jsonParser = bodyparser.json()
 
 export const articleRouter = Router()
 
-articleRouter.route('/article').post(jsonParser, userAuth.checkUserAuthenticated, ArticleCrud.createArticle)
+articleRouter
+  .route('/article')
+  .post(jsonParser, userAuth.checkUserAuthenticated, ArticleCrud.createArticle)
+  .get(ArticleCrud.getAlleArticles)
+
+articleRouter
+  .route('/article/:slug')
+  .get(ArticleCrud.getSingleArticle)
+  .patch(jsonParser, userAuth.checkUserAuthenticated, ArticleCrud.editArticle)
+  .delete(userAuth.checkUserAuthenticated, ArticleCrud.deleteArticle)

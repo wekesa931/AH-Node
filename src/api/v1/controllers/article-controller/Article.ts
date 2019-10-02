@@ -34,6 +34,85 @@ class ArticleCrud extends CrudController {
       next(APIError.errorResponseMessage(400, 'Oops! Something went wrong', res))
     }
   }
+  public getSingleArticle: RequestHandler = async (req, res, next) => {
+    try {
+      const { slug } = req.params
+      const article = await db.Article.findOne({
+        where: { slug },
+      })
+      article
+        ? jsonResponse({
+            res,
+            status: 200,
+            [this.model]: article.get(),
+          })
+        : next(APIError.errorResponseMessage(400, 'Article not found', res))
+    } catch (err) {
+      next(APIError.errorResponseMessage(500, 'Oops! Something went wrong', res))
+    }
+  }
+  public getAlleArticles: RequestHandler = async (req, res, next) => {
+    try {
+      const articles = await db.Article.findAll()
+      articles
+        ? jsonResponse({
+            res,
+            status: 200,
+            Profiles: articles,
+          })
+        : next(APIError.errorResponseMessage(400, 'No article found', res))
+    } catch (err) {
+      next(APIError.errorResponseMessage(500, 'Oops! Something went wrong', res))
+    }
+  }
+  public editArticle: RequestHandler = async (req, res, next) => {
+    // @ts-ignore
+    const { id } = req.currentUser
+    const { slug } = req.params
+    const { body } = req
+    const selector = {
+      where: { userId: id, slug },
+      returning: true,
+      plain: true,
+    }
+    try {
+      // @ts-ignore
+      const editRelation = await db[`${this.model}`].update(body, selector)
+      editRelation
+        ? jsonResponse({
+            res,
+            status: 200,
+            [this.model]: editRelation[1],
+          })
+        : next(APIError.errorResponseMessage(401, `You cannot change this ${this.model}`, res))
+    } catch (err) {
+      next(APIError.errorResponseMessage(500, `Ooops! An error has occured!`, res))
+    }
+  }
+
+  public deleteArticle: RequestHandler = async (req, res, next) => {
+    // @ts-ignore
+    const { id } = req.currentUser
+    const { slug } = req.params
+    const selector = {
+      where: { userId: id, slug },
+      returning: true,
+      plain: true,
+    }
+    try {
+      // @ts-ignore
+      const editRelation = await db[`${this.model}`].destroy(selector)
+      editRelation
+        ? jsonResponse({
+            res,
+            status: 200,
+            message: 'Article deleted',
+          })
+        : next(APIError.errorResponseMessage(401, `Article not existing`, res))
+    } catch (err) {
+      next(APIError.errorResponseMessage(500, `Ooops! An error has occured!`, res))
+    }
+  }
 }
 
 export default new ArticleCrud()
