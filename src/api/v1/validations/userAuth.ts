@@ -109,6 +109,7 @@ class userAuth {
 
     if (!token) {
       next(APIError.errorResponseMessage(401, 'Unauthorized Access', res))
+      return
     }
     try {
       const decoded: DecodedInterface = jwt.verify(token, JWT_SECRET)

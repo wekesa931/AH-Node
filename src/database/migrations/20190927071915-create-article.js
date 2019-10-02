@@ -1,44 +1,55 @@
 'use strict'
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Profiles', {
+    return queryInterface.createTable('Articles', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
+      slug: {
+        type: Sequelize.STRING,
+      },
       userId: {
         type: Sequelize.UUID,
         references: {
           model: 'Users',
           key: 'id',
-          as: 'userId',
         },
-      },
-      firstname: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      lastname: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      email: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      username: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      bio: {
-        allowNull: true,
-        type: Sequelize.STRING,
+        onDelete: 'CASCADE',
+        onUpdate: 'NO ACTION',
       },
       image: {
         type: Sequelize.STRING,
+      },
+      title: {
+        type: Sequelize.STRING,
+      },
+      description: {
+        type: Sequelize.STRING,
+      },
+      body: {
+        type: Sequelize.TEXT,
+      },
+      taglist: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true,
+        defaultValue: [],
+      },
+      rating: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      bookmarked: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      favoritesCount: {
+        type: Sequelize.INTEGER,
+      },
+      author: {
+        type: Sequelize.JSONB,
       },
       createdAt: {
         allowNull: false,
@@ -51,6 +62,6 @@ module.exports = {
     })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Profiles')
+    return queryInterface.dropTable('Articles')
   },
 }
