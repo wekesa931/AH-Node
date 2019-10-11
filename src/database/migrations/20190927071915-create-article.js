@@ -10,6 +10,7 @@ module.exports = {
       },
       slug: {
         type: Sequelize.STRING,
+        unique: true,
       },
       userId: {
         type: Sequelize.UUID,
@@ -33,6 +34,11 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       taglist: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
+        defaultValue: [],
+      },
+      comments: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true,
         defaultValue: [],

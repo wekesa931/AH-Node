@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import { UserInit, UserAttributes, UserInstance } from './user'
 import { ProfileInit, ProfileAttributes, ProfileInstance } from './profile'
 import { ArticleInit, ArticleAttributes, ArticleInstance } from './article'
+import { CommentInit, CommentAttributes, CommentInstance } from './comments'
 
 dotenv.config()
 
@@ -18,6 +19,7 @@ interface Database {
   User: Sequelize.Model<UserInstance, UserAttributes>
   Profile: Sequelize.Model<ProfileInstance, ProfileAttributes>
   Article: Sequelize.Model<ArticleInstance, ArticleAttributes>
+  Comment: Sequelize.Model<CommentInstance, CommentAttributes>
 }
 
 const db: Database = {
@@ -26,6 +28,7 @@ const db: Database = {
   User: UserInit(sequelize),
   Profile: ProfileInit(sequelize),
   Article: ArticleInit(sequelize),
+  Comment: CommentInit(sequelize),
 }
 
 Object.keys(db).forEach((modelName): void => {

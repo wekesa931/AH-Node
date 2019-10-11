@@ -31,7 +31,7 @@ class ArticleCrud extends CrudController {
         [this.model]: newArticle.get(),
       })
     } catch (err) {
-      next(APIError.errorResponseMessage(400, 'Oops! Something went wrong', res))
+      next(APIError.errorResponseMessage(400, `${err.message}`, res))
     }
   }
   public getSingleArticle: RequestHandler = async (req, res, next) => {
@@ -40,25 +40,32 @@ class ArticleCrud extends CrudController {
       const article = await db.Article.findOne({
         where: { slug },
       })
+      const articleComments = await db.Comment.findAll({
+        where: { articleSlug: slug },
+      })
+      const art = article && article.get()
+      const articleDetails = { ...art, comments: articleComments && articleComments }
       article
         ? jsonResponse({
             res,
             status: 200,
-            [this.model]: article.get(),
+            [this.model]: articleDetails,
           })
         : next(APIError.errorResponseMessage(400, 'Article not found', res))
     } catch (err) {
-      next(APIError.errorResponseMessage(500, 'Oops! Something went wrong', res))
+      next(APIError.errorResponseMessage(400, `${err.message}`, res))
     }
   }
   public getAlleArticles: RequestHandler = async (req, res, next) => {
     try {
-      const articles = await db.Article.findAll()
+      const articles = await db.Article.findAll({
+        attributes: ['slug', 'image', 'title', 'description', 'taglist', 'rating', 'bookmarked', 'author', 'createdAt'],
+      })
       articles
         ? jsonResponse({
             res,
             status: 200,
-            Profiles: articles,
+            Articles: articles,
           })
         : next(APIError.errorResponseMessage(400, 'No article found', res))
     } catch (err) {

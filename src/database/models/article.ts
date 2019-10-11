@@ -8,6 +8,7 @@ export interface ArticleAttributes {
   userId?: string
   image?: string
   title: string
+  comments: object[]
   description: string
   body: string
   taglist: string[]
@@ -54,6 +55,11 @@ export const ArticleInit = (sequalize: Sequelize.Sequelize): Sequelize.Model<Art
       type: Sequelize.TEXT,
     },
     taglist: {
+      type: Sequelize.ARRAY(Sequelize.STRING),
+      allowNull: true,
+      defaultValue: [],
+    },
+    comments: {
       type: Sequelize.ARRAY(Sequelize.STRING),
       allowNull: true,
       defaultValue: [],
